@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Movie Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'movies/css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🎬 CineScope</div>
+        <ul class="nav-links">
+            <li><a href="{% url 'Home' %}">Home</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 CineScope | Built with Django</p>
+    </footer>
+</body>
+</html>

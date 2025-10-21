@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ movie.title }} | CineVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'movies/css/main.css' %}">
+</head>
+<body>
+  <div class="container">
+    <!-- Movie Header -->
+    <div class="movie-header">
+      <img src="{{ movie.get_poster }}" alt="{{ movie.title }}">
+      <h1>{{ movie.title }}</h1>
+      <p class="meta">{{ movie.genre }}</p>
+      <p class="meta">{{ movie.release_year }}</p>
+      <p class="rating">⭐ {{ movie.rating }}/10</p>
+      <p class="description">{{ movie.description }}</p>
+    </div>
+
+    <!-- Recommendations -->
+    {% if recommendations %}
+    <div class="recommendations">
+      <h2>Similar Movies</h2>
+      <div class="recommendation-list">
+        {% for rec in recommendations %}
+        <div class="recommendation-card">
+          <a href="{% url 'movie_detail' rec.id %}">
+            <img src="{{ rec.get_poster }}" alt="{{ rec.title }}">
+            <p>{{ rec.title }}</p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+      <p>No Recommendations Available.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

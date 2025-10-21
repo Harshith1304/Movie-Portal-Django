@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Portal | CineVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'movies/css/main.css' %}">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #111;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      padding-top: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    /* Filter Panel */
+    .filter-panel {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .filter-panel select {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      background-color: #1c1c1c;
+      color: #fff;
+    }
+
+    .filter-panel button {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+      background-color: #e50914;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Movie Grid */
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .movie-card {
+      background: #1c1c1c;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.2s;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .movie-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover; /* keeps image proportional and neatly cropped */
+      transition: transform 0.3s;
+    }
+
+    .movie-card img:hover {
+      transform: scale(1.05);
+    }
+
+    .movie-card h3 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+    }
+
+    .movie-card p {
+      font-size: 14px;
+      margin: 0 0 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .movie-card img {
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>All Movies</h1>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel">
+      <form method="get">
+        <select name="genre" onchange="this.form.submit()">
+          <option value="">All Genres</option>
+          {% for g in genres %}
+            <option value="{{ g }}" {% if g == request.GET.genre %}selected{% endif %}>{{ g }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="year" onchange="this.form.submit()">
+          <option value="">All Years</option>
+          {% for y in years %}
+            <option value="{{ y }}" {% if y|stringformat:"s" == request.GET.year %}selected{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="rating" onchange="this.form.submit()">
+          <option value="">All Ratings</option>
+          {% for r in "10 9 8 7 6 5 4 3 2 1".split %} 
+            <option value="{{ r }}" {% if r == request.GET.rating %}selected{% endif %}>{{ r }}+</option>
+          {% endfor %}
+        </select>
+      </form>
+    </div>
+
+    <!-- Movie Grid -->
+    <div class="movie-grid">
+      {% for movie in movies %}
+      <div class="movie-card">
+        <a href="{% url 'movie_detail' movie.id %}">
+          <img src="{{ movie.get_poster }}" alt="{{ movie.title }}">
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.genre }} • {{ movie.release_year }}</p>
+          <p>⭐ {{ movie.rating }}/10</p>
+        </a>
+      </div>
+      {% empty %}
+      <p style="text-align:center; width:100%;">No movies found.</p>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
